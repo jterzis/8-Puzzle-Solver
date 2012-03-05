@@ -1,21 +1,18 @@
 ;algorithms to implement general uninformed search
 ;depth first search (lifo queue), bfs (fifo), uniform-cost search
 ;iterative deepening
-
 ;define node data structure which includes accessor functions implicit
-
-
 ;search strategies defined by order of node expansion on fringe (queue)
 
 ;(defun general-search (initial-state successorf goalp
- ;                       &key (enqueue #'enqueue-LIFO)
-  ;                      (key #'identity));key dflts to returning itself 
+;                       &key (enqueue #'enqueue-LIFO)
+;                      (key #'identity));key dflts to returning itself 
 ;general initializes search by creating queue data structure setting
 ;fringe equal to queue, which was initialized with initial state node
 ;then it calls tree search with initial fringe, successor function, and goalp funct
-  ;(let ((fringe (make-q :enqueue enqueue :key key)))
-   ; (q-insert fringe (list (make-node :state initial-state)))
-    ;(tree-search fringe successorf goalp)))
+;(let ((fringe (make-q :enqueue enqueue :key key)))
+; (q-insert fringe (list (make-node :state initial-state)))
+;(tree-search fringe successorf goalp)))
 
 ;tree search using tail recursion to search tree
 ;it takes a node out of queue (method depends on type of queue) 
@@ -124,18 +121,13 @@
                            :depth (1+ (node-depth node))) 
                )) 
               triples) )
-
-            
-            
             ) ;apply mapcar to returned list of tuples from successor func
-            
     ) ) ;return value of expand is list of constructed successor nodes
 
 
 ;EXPAND4 checks if successors are already on closed and fringe  and discards if so 
 (defun expand4 (successorf node expnode closed fringe heuristicf)
   (let ((triples (funcall successorf (node-state node) :heuristicf heuristicf) ))
-        
     (let  ((triples3 '()) )
         ;if fringe and closed are NOT empty 
        (cond   ( (and (not (equal (length closed) nil)) (not (equal (q-empty fringe) nil)))   ;if a successor is NOT in closed list or fringe , expand it and add to fringe 
@@ -222,7 +214,6 @@
 
 ;action sequence. if were at goal this function iterates from goal to root printing
 ;list of sequence of actions that resulted in goal state, # steps to reach completed state, number of nodes expanded
-
 
 (defun action-sequence (node expnode &optional (actions nil))
   (if (node-parent node)   ;if were not at root
