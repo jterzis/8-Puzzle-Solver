@@ -1,0 +1,6 @@
+(defun manhattan2 (s1 s2)
+  (do ((n 1 (1+ n))
+       (total 0))
+      ((= n *puzzle-tiles*) total)
+    (setq total (+ total (abs (- (xcoord s1 n) (xcoord s2 n)))
+			 (abs (- (ycoord s1 n) (ycoord s2 n)))))))
