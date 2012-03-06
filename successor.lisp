@@ -1,4 +1,6 @@
 
+;code below implements successor function, heuristics, and several auxiliary functions to aid the
+;graph search algorithm
 ;implement successor function for 8 puzzle 
 ;
 ;node-state = '(0 1 2 3 4 5 6 7 8)
@@ -47,33 +49,8 @@
   )
 
 
-;Gaschnig's Heuristic;  Locate position if Blank, X. If X does not contain its goal element, swap goal element with X.
-;Otherwise, swap a misplaced tile with X. Repeat and take total number of moves. This heuristic dominates misplaced tiles.
 
-(defun gaschnig (node-state)
-  ;find position of the Blank
-  (let ((cnt 0)
-        (goal '(0 1 2 3 4 5 6 7 8))
-        (x 0);location of tile to swap with blank
-        (cntmoves 0))
-    ;(loop for y in node-state do (if (equal y 0) (return cnt) (incf cnt) )) ;find position of blank
-    ;while were not in goal state swap a tile depending on whether blank is in goal spot or not 
-    (loop while (not (equal goal node-state)) do (incf cntmoves)
-      (loop for z in node-state do (if (equal z 0) (return cnt) (incf cnt) )) ;find position of blank
-
-          (cond ((not (equal cnt 0));if blank is not in its goal spot 
-           (progn (setf node-state (swap node-state cnt (apply '+ (mapcar 
-                    (lambda (a) (if (equal a (elt goal cnt))x (progn(incf x)0))) node-state)) ) );location of element that should be in space cnt 
-            (setf x 0) (setf cnt 0)) )
-
-           ((equal cnt 0) (progn (setf node-state (swap node-state cnt 
-                                                        (loop for i in goal do (if (not(equal (elt node-state i) i)) (return i)0
-                                                                        ))) )  (setf cnt 0)))
-           )
-       )cntmoves)
-  );return count of moves made 
-
-
+;linearconflict is an admissable heuristic 
 ;Two tiles tj and tk are in linear conflict if tj and tk are in the same line , the goal positions of tj and tk are both in that line
 ;, tj is to the right of tk, and goal positoin of tj is to the left of the goal position of tk
 (defun linearconflict (node-state)
@@ -107,12 +84,6 @@
 
 
 
-;set dominant heuristic equal to max of gaschnig , misplaced, and manhattan 
-(defun extracredit2 (node-state)
-  (let ((maximum  (max (gaschnig node-state)
-  (manhattan node-state)
-   ) )) maximum )
-   )
 
 ;set the dominant heuristic to equal manhattan+linear conflict
 (defun extracredit (node-state)
