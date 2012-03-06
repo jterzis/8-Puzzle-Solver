@@ -8,11 +8,20 @@ SPRING 2012
 This version of A* for the 8-puzzle checks if a node removed from fringe is
 on visited (closed) list and if so does not expand it.
 It also checks that successors are not on fringe before expanding them as per
-Norvig's general graph algorithm. 
+Norvig's general graph algorithm.
 
+TO RUN: Please unzip files into a directory and load "jt2514.lisp" to 
+run (8-puzzle 'initial-state #'heuristic) or (random-case)
+
+Note: As per the assignment details, (random-case) produces 1 initial solvable
+state. It does so by checking that the number of inversions in a pseudorandom
+9 element permutation of digits [0 8] is even. 
+
+Note: Running this code on CLISP can potentially result in a stack overflow. Please
+use Steel Bank Common Lisp or an implementation with a variable stack size.
 
 Extra Credit: 
-We chose to use manhattan distance + linear conflict as our dominant heuristic.
+I chose to use manhattan distance + linear conflict as the dominant heuristic over manhattan and misplaced.
 Linear conflict on its own is an admissable heuristic because it underestimates the true cost
 to the goal by relaxing the problem constraints and adding costs that would apply in reality if 
 and only if tiles could uproot and fly over eachother. Specifically, for each line, if two squares 
@@ -22,15 +31,27 @@ is to the left of tk, then we have a conflict b/c for tj to reach its goal tk wi
 linear conflict, we add 2 to the cost. Manhattan distance is admissable and underestimates 
 the cost to reach the goal in actuality. If we add linear conflict to MD, we still have an 
 admissable heuristic because we are merely adding the minimum cost of resolving an actual linear 
-conflict on the board and in order to reach the goal state,ALL linear conflicts must be resolved. 
-So MD+LC is still admissable and furthermore dominates MD and the misplaced tiles heuristics 
+conflict on the board and in order to reach the goal state,ALL linear conflicts must be resolved at the least.
+So MD+LC is still admissable and furthermore dominates Manhattan and the misplaced tiles heuristics 
 since misplaced tiles <= MD <= MD+LC for every node n in the state space. This follows from the 
 fact that LC >= 0 for every node n. SO MD+LC will strictly expand less nodes than MD or Misplaced 
-Tiles except in cases where MD+LC expands more nodes on the goal contour, C*. It follows that MD+LC is 
-optimal, optimally efficient, and consistent.
+Tiles except in cases where MD+LC expands more nodes on the goal contour, C*. 
+
+To prove consistency, it suffices to prove that linear conflict is consistent since we have 
+already established the consistency of Manhattan distance and MD+LC is a linear combination.
+Manhattan Distance+Linear Conflict is then consistent because any step taken from a successor of n
+will not nullify a given linear conflict since at least an extra 2 moves is required to resolve
+a linear conflict. Consequently, h(n)<=C(n,P) + h(P) holds since the step cost increases the right 
+hand side by 1 and the linear conflict remains the same for 1 move. 
+It follows that MD+LC is optimal and optimally efficient.
 
 
 
+
+
+Generated 5 initial random SOLVABLE states using (random-case) and tested them on 3 heuristics
+to illustrate dominance of manhattan distance over misplaced tiles and manhattan distance + linear 
+conflict over manhattan distance and misplaced tiles. 
 
 CASE 1)
 
